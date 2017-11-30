@@ -1,0 +1,28 @@
+---
+# tasks file for tomcat7
+- name: Installing TOMCAT7 In Ubuntu
+  apt:
+    name:
+      - tomcat7
+      - tomcat7-docs
+      - tomcat7-admin
+      - tomcat7-examples
+
+    state: present
+- name: Changing the java options
+  blockinfile:
+    path: /etc/default/tomcat7
+    block: |
+      JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true -Xmx512m -XX:MaxPermSize=256m -XX:+UseConcMarkSweepGC"
+- name: changing the Tomcat user and password
+  blockinfile:
+    path: /etc/tomcat7/tomcat-users.xml
+    marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
+    insertafter: "<tomcat-users>"
+    content: |
+      <user username="admin" password="password" roles="manager-gui,admin-gui"/>
+- name: starting tomcat
+  service:
+    name: tomcat7
+    state: started
+  notify: restart tomcat
