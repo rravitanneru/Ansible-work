@@ -1,0 +1,24 @@
+---
+# tasks file for java
+
+- name: adding java repo in ubuntu distro
+  apt_repository:
+    repo: 'ppa:webupd8team/java'
+ # when: ansible_distribution == 'Ubuntu' 
+- name: installing java 
+  apt: name=default-jdk state=present
+- name: updating java home path
+  blockinfile: 
+    path: /etc/environment
+    block: |
+      JAVA_HOME="/usr/lib/jvm/open-jdk"
+- shell: export JAVA_HOME=/usr/lib/jvm/open-jdk
+#  copy: 
+#    src: /git/Ansible-work/roles/java/files/source.sh 
+#    dest: /tmp/source.sh
+#    mode: 777
+#    owner: root
+#    group: root
+#- name: running
+#  script: /tmp/source.sh
+    
