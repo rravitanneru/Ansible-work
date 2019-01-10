@@ -1,5 +1,5 @@
 ---
-- name: installing apache
+- name: installing apache2
   hosts: apache
   roles:
     - apache
